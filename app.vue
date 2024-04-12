@@ -1,3 +1,3 @@
 <template>
-  <NuxtPage class="w-full min-h-screen text-neutral-100 bg-neutral-800" />
+  <NuxtPage class="w-full h-dvh text-neutral-100 bg-neutral-800" />
 </template>
