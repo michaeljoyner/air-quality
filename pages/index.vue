@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 h-full flex flex-col">
+  <div class="px-6 flex flex-col">
     <div class="flex flex-col justify-center items-center py-20">
       <p :class="textColour(cityData?.value)" class="text-8xl font-black">
         {{ cityData?.value }}
