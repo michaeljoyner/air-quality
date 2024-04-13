@@ -1,7 +1,10 @@
 <template>
   <div class="px-6 flex flex-col">
     <div class="flex flex-col justify-center items-center py-20">
-      <p :class="textColour(cityData?.value)" class="text-8xl font-black">
+      <p class="capitalize text-base text-neutral-300">
+        {{ currentCity.fullName }}
+      </p>
+      <p :class="textColour(cityData?.value)" class="text-9xl font-black">
         {{ cityData?.value }}
       </p>
       <p class="text-xs text-neutral-300 mt-3">{{ cityData?.name }}</p>
@@ -23,13 +26,19 @@
           <p class="text-xs whitespace-nowrap">{{ shortDate(day.date) }}</p>
         </div>
       </div>
+      <div class="pt-20 flex justify-center">
+        <MountainsIcon v-if="level === 1" class="w-32" />
+        <WindIcon v-if="level === 2" class="w-32" />
+        <ChimneyIcon v-if="level === 3" class="w-32 ml-20" />
+        <SkullIcon v-if="level === 4" class="w-32" />
+      </div>
     </div>
     <div class="flex justify-center items-center gap-6 my-12">
       <button
         v-for="city in myCities"
         :key="city.shortName"
         @click="currentCity = city"
-        class="border border-emerald-500 px-3 py-1 text-xs uppercase rounded bg-neutral-700 text-emerald-300"
+        class="border border-nuetral-200 px-3 py-1 text-xs uppercase rounded bg-neutral-700 hover:bg-black text-slate-200"
       >
         {{ city.shortName }}
       </button>
@@ -74,10 +83,18 @@ const shortDate = (date: string): string => {
 
 const timeOfDay = (date: string): string => {
   return new Intl.DateTimeFormat("en-US", {
-    hour: "2-digit",
+    hour: "numeric",
     minute: "2-digit",
   }).format(new Date(date));
 };
+
+const level: number = computed(() => {
+  if (!cityData.value) return 0;
+  if (cityData.value?.value <= 50) return 1;
+  if (cityData.value?.value <= 100) return 2;
+  if (cityData.value?.value <= 150) return 3;
+  if (cityData.value?.value > 150) return 4;
+});
 
 const textColour = (val: number): string => {
   const key = Math.floor(val / 50);
