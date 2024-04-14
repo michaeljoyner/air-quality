@@ -37,10 +37,10 @@
     </div>
     <div class="flex justify-center">
       <button
-        class="bg-neutral-900 px-12 pt-4 pb-2 rounded-t-full border border-rose-500 border-b-0"
+        class="bg-neutral-900 px-8 pt-4 pb-2 rounded-t-full border border-rose-500 border-b-0"
         @click="showLocations = !showLocations"
       >
-        <LocationIcon class="w-12 h-12 text-rose-500" />
+        <LocationIcon class="w-8 h-8 text-rose-500" />
       </button>
     </div>
     <Transition
