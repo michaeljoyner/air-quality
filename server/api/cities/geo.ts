@@ -1,8 +1,9 @@
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
 
+  const query = getQuery(event);
   const airData = await $fetch(
-    `http://api.waqi.info/feed/${event.context.params.city}/?token=${config.apiKey}`
+    `http://api.waqi.info/feed/geo:${query.lat};${query.lng}/?token=${config.apiKey}`
   );
 
   return {
