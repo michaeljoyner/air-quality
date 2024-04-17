@@ -15,10 +15,18 @@ type CityResponse = {
 };
 
 type City = {
+  idx: number,
   shortName: string;
   fullName: string;
   lat: number;
   lng: number;
 };
 
-export type { AqiValue, CityResponse, City };
+type AqiRecord = {
+  id: number;
+  hour: number;
+  value: number;
+  created_at: number;
+}
+
+export type { AqiValue, CityResponse, City, AqiRecord };

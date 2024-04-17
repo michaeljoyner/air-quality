@@ -3,6 +3,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
     apiKey: "AQI-KEY",
+    tursoDatabaseUrl: "",
+    tursoAuthToken: "",
   },
   modules: ["@nuxtjs/tailwindcss"],
 });

@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
     `http://api.waqi.info/feed/geo:${query.lat};${query.lng}/?token=${config.apiKey}`
   );
 
+  
   return {
     date: airData.data.time?.iso,
     name: airData.data.city?.name,
