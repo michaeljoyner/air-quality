@@ -1,8 +1,18 @@
 <template>
-  <svg viewBox="0 0 200 66">
-    <rect v-for="(record, index) in normalisedRecords" :key="record.id" width="2" :height="record.value"
-      :x="200 - (index + 1) * 2" :y="66 - record.value" :class="record.colour" />
-  </svg>
+  <div>
+    <svg viewBox="0 0 200 66">
+      <rect
+        v-for="(record, index) in normalisedRecords"
+        :key="record.id"
+        width="2"
+        :height="record.value"
+        :x="200 - (index + 1) * 2"
+        :y="66 - record.value"
+        :class="record.colour"
+      />
+    </svg>
+    <p>Average of {{ avg }} over last {{ records.length }} hours</p>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -23,8 +33,11 @@ const props = defineProps<propTypes>();
 const max: ComputedRef<number> = computed(() =>
   Math.max(...props.records.map((r) => r.value)),
 );
-const min: ComputedRef<number> = computed(() =>
-  Math.min(...props.records.map((r) => r.value)),
+
+const avg: ComputedRef<number> = computed(
+  () =>
+    props.records.reduce((total, record) => total + record.value, 0) /
+    props.records.length,
 );
 
 const valColour = (val: number): string => {
