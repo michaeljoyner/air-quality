@@ -11,7 +11,7 @@
         :class="record.colour"
       />
     </svg>
-    <p>Average of {{ avg }} over last {{ records.length }} hours</p>
+    <p class="text-center" v-show="records.length">Average of {{ Math.round(avg) }} over last {{ records.length }} hours</p>
   </div>
 </template>
 

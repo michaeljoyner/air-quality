@@ -128,8 +128,8 @@ const cityData: Ref<null | CityResponse> = ref(null);
 const history: Ref<AqiRecord[]> = ref([]);
 
 const fetchHistory = async () => {
-  if (!currentCity.value.idx) return;
   history.value = [];
+  if (!currentCity.value.idx || currentCity.value.idx === 999) return;
   const data = await $fetch<AqiRecord[]>(
     `/api/cities/history?idx=${currentCity.value.idx}`,
   );
@@ -196,6 +196,7 @@ const setCurrentLocation = (position: GeolocationPosition) => {
   currentLocation.value = position;
   myCities.value = [
     {
+      idx: 9999,
       shortName: "My Location",
       fullName: "My Location",
       lat: position.coords.latitude,
@@ -208,7 +209,7 @@ const handleLocationError = (err: GeolocationPositionError) => {
   console.error(err.message);
 };
 
-const distanceAway: string = computed(() => {
+const distanceAway: ComputedRef<string> = computed(() => {
   if (!cityData.value || !currentLocation.value) return "";
 
   return distanceApart(cityData.value, currentLocation.value);
@@ -218,18 +219,19 @@ const distanceApart = (
   cityData: CityResponse,
   location: GeolocationPosition,
 ): string => {
-  var R = 6371; // Radius of the earth in km
-  var dLat = deg2rad(location.coords.latitude - cityData.lat); // deg2rad below
-  var dLon = deg2rad(location.coords.longitude - cityData.lng);
-  var a =
+  let R = 6371; // Radius of the earth in km
+  let dLat = deg2rad(location.coords.latitude - cityData.lat); // deg2rad below
+  let dLon = deg2rad(location.coords.longitude - cityData.lng);
+  let a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(deg2rad(cityData.lat)) *
       Math.cos(deg2rad(location.coords.latitude)) *
       Math.sin(dLon / 2) *
       Math.sin(dLon / 2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  var d = R * c; // Distance in km
-  return `${Math.round(d * 100) / 100}km away`;
+  let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  let d = R * c; // Distance in km
+  const finalDistance = d < 2 ? Math.round(d) : Math.round(d * 100) / 100;
+  return `${finalDistance}km away`;
 };
 
 const deg2rad = (deg: number): number => deg * (Math.PI / 180);
