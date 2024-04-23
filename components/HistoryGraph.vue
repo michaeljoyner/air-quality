@@ -11,7 +11,12 @@
         :class="record.colour"
       />
     </svg>
-    <p class="text-center" v-show="records.length">Average of {{ Math.round(avg) }} over last {{ records.length }} hours</p>
+    <p
+      class="text-center text-neutral-300 text-xs mt-2"
+      v-show="records.length"
+    >
+      Average of {{ Math.round(avg) }} over last {{ records.length }} hours
+    </p>
   </div>
 </template>
 
@@ -41,9 +46,9 @@ const avg: ComputedRef<number> = computed(
 );
 
 const valColour = (val: number): string => {
-  if (val < 50) return "fill-blue-500";
-  if (val < 100) return "fill-green-500";
-  if (val < 150) return "fill-orange-500";
+  if (val < 50) return "fill-sky-500";
+  if (val < 100) return "fill-emerald-500";
+  if (val < 150) return "fill-amber-500";
   return "fill-red-500";
 };
 

@@ -1,30 +1,32 @@
 <template>
   <div class="px-6 flex flex-col">
-    <div class="flex flex-col justify-center items-center py-20">
-      <p class="capitalize text-base text-neutral-300 font-semibold">
-        {{ currentCity.fullName }}
-      </p>
-      <div class="flex gap-4 p-4 rounded-lg">
-        <div>
-          <p :class="textColour(cityData?.value || 9)" class="text-9xl font-black">
-            {{ cityData?.value }}
-          </p>
-        </div>
-        <div>
-          <p class="text-xs text-neutral-300 mb-4">
-            {{ timeOfDay(cityData?.date || "") }}
-          </p>
-          <div class="pb-12 flex justify-end">
-            <MountainsIcon v-if="level === 1" class="w-12" />
-            <WindIcon v-if="level === 2" class="w-12" />
-            <ChimneyIcon v-if="level === 3" class="w-12 ml-20" />
-            <SkullIcon v-if="level === 4" class="w-12" />
+    <div v-if="cityData">
+      <div class="flex flex-col justify-center items-center py-20">
+        <p class="capitalize text-base text-neutral-300 font-semibold">
+          {{ currentCity.fullName }}
+        </p>
+        <div class="flex gap-4 p-4 rounded-lg">
+          <div>
+            <p :class="textColour(cityData?.value || 9)" class="text-9xl font-black">
+              {{ cityData?.value }}
+            </p>
+          </div>
+          <div class="flex flex-col items-end justify-end">
+            <div class="flex justify-end mb-2">
+              <MountainsIcon v-if="level === 1" class="w-12" />
+              <WindIcon v-if="level === 2" class="w-12" />
+              <ChimneyIcon v-if="level === 3" class="w-12" />
+              <SkullIcon v-if="level === 4" class="w-12" />
+            </div>
+            <p class="text-xs text-neutral-300 mb-4">
+              {{ timeOfDay(cityData?.date || "") }}
+            </p>
           </div>
         </div>
-      </div>
-      <p class="text-xs text-neutral-300 mt-3">{{ cityData?.name }}</p>
+        <p class="text-xs text-neutral-300 mt-3">{{ cityData?.name }}</p>
 
-      <p class="text-xs text-neutral-300">{{ distanceAway }}</p>
+        <p class="text-xs text-neutral-300">{{ distanceAway }}</p>
+      </div>
     </div>
     <div class="flex-1">
       <div class="flex gap-3 justify-strat md:justify-center max-w-full overflow-x-auto">
@@ -125,6 +127,7 @@ cityData.value = data.value;
 
 const changeCity = async (city: City) => {
   fetchHistory();
+  cityData.value = null;
   showLocations.value = false;
   const data = await $fetch<CityResponse>(
     `/api/cities/geo?lat=${city.lat}&lng=${city.lng}`,
