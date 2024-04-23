@@ -7,13 +7,16 @@
         </p>
         <div class="flex gap-4 p-4 rounded-lg">
           <div>
-            <p :class="textColour(cityData?.value || 9)" class="text-9xl font-black">
+            <p
+              :class="textColour(cityData?.value || 9)"
+              class="text-9xl font-black"
+            >
               {{ cityData?.value }}
             </p>
           </div>
           <div class="flex flex-col items-end justify-end">
             <div class="flex justify-end mb-2">
-              <MountainsIcon v-if="level === 1" class="w-12" />
+              <FlowerIcon v-if="level === 1" class="w-8" />
               <WindIcon v-if="level === 2" class="w-12" />
               <ChimneyIcon v-if="level === 3" class="w-12" />
               <SkullIcon v-if="level === 4" class="w-12" />
@@ -29,8 +32,13 @@
       </div>
     </div>
     <div class="flex-1">
-      <div class="flex gap-3 justify-strat md:justify-center max-w-full overflow-x-auto">
-        <div v-for="day in cityData?.forecast" class="p-2 rounded-md bg-neutral-700 flex flex-col items-center">
+      <div
+        class="flex gap-3 justify-strat md:justify-center max-w-full overflow-x-auto"
+      >
+        <div
+          v-for="day in cityData?.forecast"
+          class="p-2 rounded-md bg-neutral-700 flex flex-col items-center"
+        >
           <p :class="textColour(day.value)" class="font-black">
             {{ day.value }}
           </p>
@@ -42,21 +50,36 @@
       </div>
     </div>
     <div class="flex justify-center">
-      <button class="bg-neutral-900 px-8 pt-4 pb-2 rounded-t-full border border-rose-500 border-b-0"
-        @click="showLocations = !showLocations">
+      <button
+        class="bg-neutral-900 px-8 pt-4 pb-2 rounded-t-full border border-rose-500 border-b-0"
+        @click="showLocations = !showLocations"
+      >
         <LocationIcon class="w-8 h-8 text-rose-500" />
       </button>
     </div>
-    <Transition enter-from-class="translate-y-full" leave-to-class="translate-y-full" enter-to-class="translate-y-0"
-      leave-from-class="translate-y-0">
-      <div v-show="showLocations"
-        class="fixed left-0 bottom-0 w-screen bg-neutral-700 transition-transform rounded-tl-lg rounded-tr-lg">
+    <Transition
+      enter-from-class="translate-y-full"
+      leave-to-class="translate-y-full"
+      enter-to-class="translate-y-0"
+      leave-from-class="translate-y-0"
+    >
+      <div
+        v-show="showLocations"
+        class="fixed left-0 bottom-0 w-screen bg-neutral-700 transition-transform rounded-tl-lg rounded-tr-lg"
+      >
         <div class="flex flex-col justify-center items-start gap-6 my-12 px-8">
-          <button v-for="city in myCities" :key="city.shortName" @click="currentCity = city"
-            class="border border-rose-600 px-3 py-2 capitalize w-full font-semibold rounded bg-neutral-800 hover:bg-black text-slate-200">
+          <button
+            v-for="city in myCities"
+            :key="city.shortName"
+            @click="currentCity = city"
+            class="border border-rose-600 px-3 py-2 capitalize w-full font-semibold rounded bg-neutral-800 hover:bg-black text-slate-200"
+          >
             {{ city.shortName }}
           </button>
-          <button class="text-sm text-neutral-300 w-full" @click="showLocations = false">
+          <button
+            class="text-sm text-neutral-300 w-full"
+            @click="showLocations = false"
+          >
             Cancel
           </button>
         </div>
@@ -205,9 +228,9 @@ const distanceApart = (
   let a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(deg2rad(cityData.lat)) *
-    Math.cos(deg2rad(location.coords.latitude)) *
-    Math.sin(dLon / 2) *
-    Math.sin(dLon / 2);
+      Math.cos(deg2rad(location.coords.latitude)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
   let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   let d = R * c; // Distance in km
   const finalDistance = d > 2 ? Math.round(d) : Math.round(d * 100) / 100;
