@@ -3,6 +3,7 @@ import { createClient } from "@libsql/client";
 import type { TursoCreds, City } from "../../types";
 
 export default async (req: Request) => {
+  console.log("attempting to log");
   try {
     const creds: TursoCreds = {
       url: process.env.TURSO_DATABASE_URL || "",
