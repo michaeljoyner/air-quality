@@ -7,11 +7,8 @@
         </p>
         <div class="flex gap-4 p-4 rounded-lg">
           <div>
-            <p
-              :class="textColour(cityData?.value || 9)"
-              class="text-9xl font-black"
-            >
-              {{ cityData?.value }}
+            <p :class="textColour(cityData?.data.aqi || 9)" class="text-9xl font-black">
+              {{ cityData?.data.aqi }}
             </p>
           </div>
           <div class="flex flex-col items-end justify-end">
@@ -22,27 +19,25 @@
               <SkullIcon v-if="level === 4" class="w-12" />
             </div>
             <p class="text-xs text-neutral-300 mb-4">
-              {{ timeOfDay(cityData?.date || "") }}
+              {{ timeOfDay(cityData?.data.time.iso || "") }}
             </p>
           </div>
         </div>
-        <p class="text-xs text-neutral-300 mt-3">{{ cityData?.name }}</p>
+        <p class="text-xs text-neutral-300 mt-3">
+          {{ cityData?.data.city.name }}
+        </p>
 
         <p class="text-xs text-neutral-300">{{ distanceAway }}</p>
       </div>
     </div>
     <div class="flex-1">
-      <div
-        class="flex gap-3 justify-strat md:justify-center max-w-full overflow-x-auto"
-      >
-        <div
-          v-for="day in cityData?.forecast"
-          class="p-2 rounded-md bg-neutral-700 flex flex-col items-center"
-        >
-          <p :class="textColour(day.value)" class="font-black">
-            {{ day.value }}
+      <div class="flex gap-3 justify-strat md:justify-center max-w-full overflow-x-auto">
+        <div v-for="day in cityData?.data.forecast.daily.pm25"
+          class="p-2 rounded-md bg-neutral-700 flex flex-col items-center">
+          <p :class="textColour(day.avg)" class="font-black">
+            {{ day.avg }}
           </p>
-          <p class="text-xs whitespace-nowrap">{{ shortDate(day.date) }}</p>
+          <p class="text-xs whitespace-nowrap">{{ shortDate(day.day) }}</p>
         </div>
       </div>
       <div class="mt-8 flex justify-center">
@@ -50,36 +45,21 @@
       </div>
     </div>
     <div class="flex justify-center">
-      <button
-        class="bg-neutral-900 px-8 pt-4 pb-2 rounded-t-full border border-rose-500 border-b-0"
-        @click="showLocations = !showLocations"
-      >
+      <button class="bg-neutral-900 px-8 pt-4 pb-2 rounded-t-full border border-rose-500 border-b-0"
+        @click="showLocations = !showLocations">
         <LocationIcon class="w-8 h-8 text-rose-500" />
       </button>
     </div>
-    <Transition
-      enter-from-class="translate-y-full"
-      leave-to-class="translate-y-full"
-      enter-to-class="translate-y-0"
-      leave-from-class="translate-y-0"
-    >
-      <div
-        v-show="showLocations"
-        class="fixed left-0 bottom-0 w-screen bg-neutral-700 transition-transform rounded-tl-lg rounded-tr-lg"
-      >
+    <Transition enter-from-class="translate-y-full" leave-to-class="translate-y-full" enter-to-class="translate-y-0"
+      leave-from-class="translate-y-0">
+      <div v-show="showLocations"
+        class="fixed left-0 bottom-0 w-screen bg-neutral-700 transition-transform rounded-tl-lg rounded-tr-lg">
         <div class="flex flex-col justify-center items-start gap-6 my-12 px-8">
-          <button
-            v-for="city in myCities"
-            :key="city.shortName"
-            @click="currentCity = city"
-            class="border border-rose-600 px-3 py-2 capitalize w-full font-semibold rounded bg-neutral-800 hover:bg-black text-slate-200"
-          >
+          <button v-for="city in myCities" :key="city.shortName" @click="currentCity = city"
+            class="border border-rose-600 px-3 py-2 capitalize w-full font-semibold rounded bg-neutral-800 hover:bg-black text-slate-200">
             {{ city.shortName }}
           </button>
-          <button
-            class="text-sm text-neutral-300 w-full"
-            @click="showLocations = false"
-          >
+          <button class="text-sm text-neutral-300 w-full" @click="showLocations = false">
             Cancel
           </button>
         </div>
@@ -174,10 +154,10 @@ const timeOfDay = (date: string): string => {
 
 const level: ComputedRef<number> = computed(() => {
   if (!cityData.value) return 0;
-  if (cityData.value?.value <= 50) return 1;
-  if (cityData.value?.value <= 100) return 2;
-  if (cityData.value?.value <= 150) return 3;
-  if (cityData.value?.value > 150) return 4;
+  if (cityData.value?.data.aqi <= 50) return 1;
+  if (cityData.value?.data.aqi <= 100) return 2;
+  if (cityData.value?.data.aqi <= 150) return 3;
+  if (cityData.value?.data.aqi > 150) return 4;
 });
 
 const textColour = (val: number): string => {
@@ -223,14 +203,14 @@ const distanceApart = (
   location: GeolocationPosition,
 ): string => {
   let R = 6371; // Radius of the earth in km
-  let dLat = deg2rad(location.coords.latitude - cityData.lat); // deg2rad below
-  let dLon = deg2rad(location.coords.longitude - cityData.lng);
+  let dLat = deg2rad(location.coords.latitude - cityData.data.city.geo[0]); // deg2rad below
+  let dLon = deg2rad(location.coords.longitude - cityData.data.city.geo[1]);
   let a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(cityData.lat)) *
-      Math.cos(deg2rad(location.coords.latitude)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(deg2rad(cityData.data.city.geo[0])) *
+    Math.cos(deg2rad(location.coords.latitude)) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   let d = R * c; // Distance in km
   const finalDistance = d > 2 ? Math.round(d) : Math.round(d * 100) / 100;
