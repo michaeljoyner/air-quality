@@ -1,6 +1,11 @@
 import type { Config } from "@netlify/functions";
 import { createClient } from "@libsql/client";
-import type { TursoCreds, City } from "../../types";
+import type { City } from "~/types/custom";
+
+type TursoCreds = {
+  url: string;
+  authToken: string;
+};
 
 export default async (req: Request) => {
   console.log("attempting to log");
@@ -15,8 +20,10 @@ export default async (req: Request) => {
     const client = createClient(creds);
 
     const resp = await client.execute("SELECT * FROM cities");
+    console.log(resp);
 
     const cities: City[] = resp.rows.map((row) => ({ ...row }));
+    console.log({ cities });
 
     cities.forEach(async (city) => {
       try {

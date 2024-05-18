@@ -32,7 +32,8 @@ type ForecastDay = {
 type CityResponse = z.infer<typeof CityResponseSchema>;
 
 type City = {
-  idx: number;
+  idx: string;
+  id: number;
   shortName: string;
   fullName: string;
   lat: number;
