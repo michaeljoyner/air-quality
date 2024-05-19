@@ -31,6 +31,7 @@ export default async (req: Request) => {
           `https://api.waqi.info/feed/geo:${city.lat};${city.lng}/?token=${aqiToken}`,
         );
         const respData = await resp.json();
+        console.log(respData);
         const dbResp = await client.execute({
           sql: "INSERT INTO records (city_id, hour, value) VALUES (?, ?, ?)",
           args: [
@@ -39,6 +40,7 @@ export default async (req: Request) => {
             respData.data.aqi,
           ],
         });
+        console.log(dbResp);
       } catch (err) {
         console.log(err);
         throw err;
