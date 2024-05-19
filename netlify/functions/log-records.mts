@@ -27,6 +27,7 @@ export default async (req: Request) => {
         const resp = await fetch(
           `https://api.waqi.info/feed/geo:${city.lat};${city.lng}/?token=${aqiToken}`,
         );
+        console.log(resp);
         const respData = await resp.json();
         console.log(respData);
         const dbResp = await client.execute({
@@ -49,5 +50,5 @@ export default async (req: Request) => {
 };
 
 export const config: Config = {
-  schedule: "@hourly",
+  schedule: "30 * * * *",
 };
