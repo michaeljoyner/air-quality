@@ -25,6 +25,8 @@ export default async (req: Request) => {
 
     for (let x = 0; x < cities.length, x++; ) {
       const city = cities[x];
+      const url = `https://api.waqi.info/feed/geo:${city.lat};${city.lng}/?token=${aqiToken}`;
+      console.log(`Fetching from ${url}`);
       try {
         const cityData = await ofetch(
           `https://api.waqi.info/feed/geo:${city.lat};${city.lng}/?token=${aqiToken}`,
@@ -50,5 +52,5 @@ export default async (req: Request) => {
 };
 
 export const config: Config = {
-  schedule: "50 * * * *",
+  schedule: "5 * * * *",
 };
