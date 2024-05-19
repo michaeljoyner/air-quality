@@ -3,6 +3,9 @@ import { createClient } from "@libsql/client";
 import type { City } from "~/types/custom";
 import { ofetch } from "ofetch";
 
+import type { CityResponse } from "~/types/custom";
+import { CityResponseSchema } from "~/types/custom";
+
 type TursoCreds = {
   url: string;
   authToken: string;
@@ -26,31 +29,24 @@ export default async (req: Request) => {
     for (let x = 0; x < cities.length; x++) {
       const city = cities[x];
       const url = `https://api.waqi.info/feed/geo:${city.lat};${city.lng}/?token=${aqiToken}`;
-      console.log(`Fetching from ${url}`);
       try {
-        const cityData = await ofetch(
-          `https://api.waqi.info/feed/geo:${city.lat};${city.lng}/?token=${aqiToken}`,
-        );
-        console.log(cityData);
+        const cityData = await ofetch(url);
+        const cityResponse: CityResponse = CityResponseSchema.parse(cityData);
         const dbResp = await client.execute({
           sql: "INSERT INTO records (city_id, hour, value) VALUES (?, ?, ?)",
           args: [
             city.id,
-            new Date(cityData.data.time.s).getHours(),
-            cityData.data.aqi,
+            new Date(cityResponse.data.time.iso).getHours(),
+            cityResponse.data.aqi,
           ],
         });
-        console.log(dbResp);
       } catch (err) {
-        console.log(err);
         throw err;
       }
     }
-  } catch (err) {
-    console.log(err);
-  }
+  } catch (err) {}
 };
 
 export const config: Config = {
-  schedule: "22 * * * *",
+  schedule: "0 * * * *",
 };
