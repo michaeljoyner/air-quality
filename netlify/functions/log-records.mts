@@ -23,8 +23,8 @@ export default async (req: Request) => {
 
     const cities: City[] = resp.rows.map((row) => ({ ...row }));
 
-    cities.forEach(async (city) => {
-      console.log(city);
+    for (let x = 0; x < cities.length, x++; ) {
+      const city = cities[x];
       try {
         const cityData = await ofetch(
           `https://api.waqi.info/feed/geo:${city.lat};${city.lng}/?token=${aqiToken}`,
@@ -43,12 +43,12 @@ export default async (req: Request) => {
         console.log(err);
         throw err;
       }
-    });
+    }
   } catch (err) {
     console.log(err);
   }
 };
 
 export const config: Config = {
-  schedule: "42 * * * *",
+  schedule: "50 * * * *",
 };
