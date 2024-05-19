@@ -8,7 +8,6 @@ type TursoCreds = {
 };
 
 export default async (req: Request) => {
-  console.log("attempting to log");
   try {
     const creds: TursoCreds = {
       url: process.env.TURSO_DATABASE_URL || "",
@@ -20,10 +19,8 @@ export default async (req: Request) => {
     const client = createClient(creds);
 
     const resp = await client.execute("SELECT * FROM cities");
-    console.log(resp);
 
     const cities: City[] = resp.rows.map((row) => ({ ...row }));
-    console.log({ cities });
 
     cities.forEach(async (city) => {
       try {
