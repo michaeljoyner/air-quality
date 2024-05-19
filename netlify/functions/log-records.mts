@@ -23,7 +23,7 @@ export default async (req: Request) => {
 
     const cities: City[] = resp.rows.map((row) => ({ ...row }));
 
-    for (let x = 0; x < cities.length, x++; ) {
+    for (let x = 0; x < cities.length; x++) {
       const city = cities[x];
       const url = `https://api.waqi.info/feed/geo:${city.lat};${city.lng}/?token=${aqiToken}`;
       console.log(`Fetching from ${url}`);
@@ -52,5 +52,5 @@ export default async (req: Request) => {
 };
 
 export const config: Config = {
-  schedule: "8 * * * *",
+  schedule: "22 * * * *",
 };
