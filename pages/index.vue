@@ -2,7 +2,7 @@
   <div class="px-6 flex flex-col">
     <div v-if="cityData">
       <div class="flex flex-col justify-center items-center py-20">
-        <p class="capitalize text-base text-neutral-300 font-semibold">
+        <p class="capitalize text-base text-jet font-semibold">
           {{ currentCity.fullName }}
         </p>
         <div class="flex gap-4 p-4 rounded-lg">
@@ -18,22 +18,22 @@
               <ChimneyIcon v-if="level === 3" class="w-12" />
               <SkullIcon v-if="level === 4" class="w-12" />
             </div>
-            <p class="text-xs text-neutral-300 mb-4">
+            <p class="text-xs text-jet mb-4">
               {{ timeOfDay(cityData?.data.time.iso || "") }}
             </p>
           </div>
         </div>
-        <p class="text-xs text-neutral-300 mt-3">
+        <p class="text-xs text-jet mt-3">
           {{ cityData?.data.city.name }}
         </p>
 
-        <p class="text-xs text-neutral-300">{{ distanceAway }}</p>
+        <p class="text-xs text-jet">{{ distanceAway }}</p>
       </div>
     </div>
     <div class="flex-1">
       <div class="flex gap-3 justify-strat md:justify-center max-w-full overflow-x-auto">
         <div v-for="day in cityData?.data.forecast.daily.pm25"
-          class="p-2 rounded-md bg-neutral-700 flex flex-col items-center">
+          class="p-2 rounded-md bg-chiffon text-jet flex flex-col items-center">
           <p :class="textColour(day.avg)" class="font-black">
             {{ day.avg }}
           </p>
@@ -163,12 +163,12 @@ const level: ComputedRef<number> = computed(() => {
 const textColour = (val: number): string => {
   const key = Math.floor(val / 50);
   const lookup = {
-    0: "text-blue-400",
-    1: "text-emerald-400",
-    2: "text-yellow-400",
-    3: "text-orange-400",
-    4: "text-red-400",
-    5: "text-white",
+    0: "text-sapphire",
+    1: "text-mint",
+    2: "text-bee-yellow",
+    3: "text-oranja",
+    4: "text-coral",
+    5: "text-neutral-800",
   };
   return lookup[key] || "text-gray-100";
 };
