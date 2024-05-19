@@ -1,6 +1,7 @@
 import type { Config } from "@netlify/functions";
 import { createClient } from "@libsql/client";
 import type { City } from "~/types/custom";
+import { ofetch } from "ofetch";
 
 type TursoCreds = {
   url: string;
@@ -25,18 +26,16 @@ export default async (req: Request) => {
     cities.forEach(async (city) => {
       console.log(city);
       try {
-        const resp = await fetch(
+        const cityData = await ofetch(
           `https://api.waqi.info/feed/geo:${city.lat};${city.lng}/?token=${aqiToken}`,
         );
-        console.log(resp);
-        const respData = await resp.json();
-        console.log(respData);
+        console.log(cityData);
         const dbResp = await client.execute({
           sql: "INSERT INTO records (city_id, hour, value) VALUES (?, ?, ?)",
           args: [
             city.id,
-            new Date(respData.data.time.s).getHours(),
-            respData.data.aqi,
+            new Date(cityData.data.time.s).getHours(),
+            cityData.data.aqi,
           ],
         });
         console.log(dbResp);
@@ -51,5 +50,5 @@ export default async (req: Request) => {
 };
 
 export const config: Config = {
-  schedule: "34 * * * *",
+  schedule: "42 * * * *",
 };
