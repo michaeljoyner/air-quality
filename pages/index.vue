@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="flex-1">
-      <div class="flex gap-3 justify-strat md:justify-center max-w-full overflow-x-auto">
+      <div class="flex gap-3 justify-strat md:justify-center max-w-full overflow-x-auto no-scrollbar">
         <div v-for="day in cityData?.data.forecast.daily.pm25"
           class="p-2 rounded-md bg-chiffon text-jet flex flex-col items-center">
           <p :class="textColour(day.avg)" class="font-black">
@@ -45,18 +45,19 @@
       </div>
     </div>
     <div class="flex justify-center">
-      <button class="bg-neutral-900 px-8 pt-4 pb-2 rounded-t-full border border-rose-500 border-b-0"
+      <button
+        class="fixed bottom-0 right-0 m-6 z-50 bg-chiffon shadow-md p-2 rounded-full w-10 h-10 flex justify-center items-center"
         @click="showLocations = !showLocations">
-        <LocationIcon class="w-8 h-8 text-rose-500" />
+        <LocationIcon class="w-8 h-8 text-jet" />
       </button>
     </div>
     <Transition enter-from-class="translate-y-full" leave-to-class="translate-y-full" enter-to-class="translate-y-0"
       leave-from-class="translate-y-0">
       <div v-show="showLocations"
-        class="fixed left-0 bottom-0 w-screen bg-neutral-700 transition-transform rounded-tl-lg rounded-tr-lg">
+        class="fixed left-0 bottom-0 w-screen bg-chiffon transition-transform rounded-tl-lg rounded-tr-lg">
         <div class="flex flex-col justify-center items-start gap-6 my-12 px-8">
           <button v-for="city in myCities" :key="city.shortName" @click="currentCity = city"
-            class="border border-rose-600 px-3 py-2 capitalize w-full font-semibold rounded bg-neutral-800 hover:bg-black text-slate-200">
+            class="px-3 py-2 capitalize w-full font-semibold rounded bg-off-white hover:bg-chiffon text-jet">
             {{ city.shortName }}
           </button>
           <button class="text-sm text-neutral-300 w-full" @click="showLocations = false">

@@ -1,20 +1,10 @@
 <template>
-  <div>
-    <svg viewBox="0 0 200 66">
-      <rect
-        v-for="(record, index) in normalisedRecords"
-        :key="record.id"
-        width="2"
-        :height="record.value"
-        :x="200 - (index + 1) * 2"
-        :y="66 - record.value"
-        :class="record.colour"
-      />
-    </svg>
-    <p
-      class="text-center text-neutral-300 text-xs mt-2"
-      v-show="records.length"
-    >
+  <div class="">
+    <div class="flex justify-center scale-x-90">
+      <div v-for="record in normalisedRecords" :key="record.id" class="rounded-md h-20 w-[1vw]"
+        :class="valColour(record.value)" :style="`transform: scaleY(${record.scale})`"></div>
+    </div>
+    <p class="text-center text-neutral-300 text-xs mt-2" v-show="records.length">
       Average of {{ Math.round(avg) }} over last {{ records.length }} hours
     </p>
   </div>
@@ -30,6 +20,7 @@ type propTypes = {
 type NormalisedRecord = {
   id: number;
   value: number;
+  scale: number;
   timestamp: number;
   colour: string;
 };
@@ -46,17 +37,18 @@ const avg: ComputedRef<number> = computed(
 );
 
 const valColour = (val: number): string => {
-  if (val < 50) return "fill-sky-500";
-  if (val < 100) return "fill-emerald-500";
-  if (val < 150) return "fill-amber-500";
-  return "fill-red-500";
+  if (val < 50) return "bg-sapphire";
+  if (val < 100) return "bg-mint";
+  if (val < 150) return "bg-oranja";
+  return "bg-coral";
 };
 
 const normalisedRecords: ComputedRef<NormalisedRecord[]> = computed(() =>
   props.records
     .map((r) => ({
       id: r.id,
-      value: (r.value / max.value) * 66,
+      value: r.value,
+      scale: r.value / max.value,
       timestamp: r.created_at,
       colour: valColour(r.value),
     }))
