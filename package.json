@@ -10,7 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@libsql/client": "^0.5.6",
+    "@libsql/client": "^0.14.0",
     "libsql": "^0.3.18",
     "netlify": "^13.1.16",
     "nuxt": "^3.11.2",
